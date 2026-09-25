@@ -1,0 +1,13 @@
+RecordID;ISBN;Title;Author;Genre;PubYear;PriceUSD;Stock;LastSaleDate;LastSaleQty;AvgRating;SupplierID
+1;9780143127741;The Copper Orchard;M. E. Halstrom;Fiction;2018;14.99;23;2025-10-10;2;4.2;SUP001
+2;9780307269997;Patterns of Quiet;A. Verden;Poetry;2020;12.50;12;2025-10-12;1;4.6;SUP002
+3;9781982134520;Practical Urban Foraging;L. C. Navarro;Nonfiction;2016;18.00;7;2025-09-30;3;4.0;SUP003
+4;9780525555360;Circuit Stories;R. K. Bennet;Science Fiction;2022;16.25;5;2025-10-14;1;4.4;SUP001
+5;9781593279509;Handmade Typography;S. O. Kim;Art & Design;2015;27.00;4;2025-08-21;2;4.7;SUP004
+6;9780307743657;Tides of Reason;P. Maher;Philosophy;2011;10.99;30;2025-10-11;5;3.9;SUP002
+7;9781449340377;Introduction to Wild Baking;F. Duarte;Cooking;2019;21.50;9;2025-10-09;2;4.3;SUP005
+8;9780062871253;Maps for Modern Gardens;C. Ito;Hobbies;2023;19.95;6;2025-10-13;1;4.1;SUP003
+9;9780143128571;The Last Radio;N. G. Ellison;Historical Fiction;2014;13.45;14;2025-10-07;4;4.0;SUP001
+10;9780307474278;Data Without Tears;H. V. Rao;Technology;2021;29.99;3;2025-09-29;1;4.8;SUP004
+11;9780735211303;A Walk Through Rust;I. Morales;Programming;2020;34.00;8;2025-10-01;2;4.5;SUP006
+12;9781590599992;Quiet Machines;B. A. Sterling;Essays;2017;11.75;18;2025-10-05;3;3.8;SUP002

@@ -1,0 +1,194 @@
+---
+title: Lab 4
+format:
+    html:
+        css: styles.css
+---
+
+## Objectives {.unnumbered}
+
+This lab accompanies the Week 4 notes, [*Data Wrangling I - Loading, Cleaning and Tidying*](https://soton-fds.github.io/week04.html).
+
+- Load delimited data files into `R` using `readr`, and check that the data has loaded correctly.
+- Use `dplyr` to filter, select, mutate, arrange, group and summarise data.
+- Recognise whether a dataset is tidy, and use `tidyr` to tidy it by pivoting and separating columns.
+- Chain operations together into readable pipelines using `|>`.
+
+### Task 1: Loading Data
+
+- [ ] The directory `data/part1/` contains three data files. Load them into `R` using `tidyverse`. (Hint: the three files are not all formatted in the same way.)
+- [ ] By default, each `read_*` function prints a message describing the columns it has read. Make sure these messages are hidden.
+- [ ] For each of the files, display the first few rows of the file.
+
+::: {.solution}
+
+:::
+
+### Task 1b: Checking Loaded Data
+
+Getting data to load without an error is only the first step: `R` will happily load data in a way that is *wrong*.
+You should always check that what you have loaded makes sense.
+In this task we will look more closely at the three files from Task 1.
+
+The file `data3` contains information about books in a bookshop.
+
+- [ ] Look at the type of each column. Is the `ISBN` column stored sensibly? (Hint: an ISBN is an identifier; would it make sense to add two ISBNs together? What would happen to an ISBN that starts with a `0`?)
+- [ ] Reload the file so that `ISBN` is stored as text. (Hint: look up the `col_types` argument of `read_delim`, and the `cols` and `col_character` functions.)
+- [ ] `readr` also has a function called `read_csv2`, which reads files that use `;` as a delimiter. Try loading `data3` with `read_csv2` instead. Compare the `PriceUSD` and `AvgRating` columns to the raw file. What has gone wrong?
+
+::: {.solution}
+
+:::
+
+The file `data1.csv` contains student scores from two tests, with their average.
+
+- [ ] How are missing scores recorded in the raw file, and what do they become when loaded into `R`? What else in the file was loaded as missing?
+- [ ] Compute the mean of `score1`. Why do you get `NA`, and how can you fix this? (Hint: look at how `na.rm` was used in the notes.)
+- [ ] Look at the row for Henry Zhao. Are his scores really `0`? What happens to the mean of `score1` and of `average` if he is excluded?
+
+::: {.solution}
+
+:::
+
+The file `data2.txt` contains readings from air quality monitoring stations.
+
+- [ ] Create a `tibble` containing only `station_id` and the particulate matter readings (the columns measured in µg/m³). Use a tidyselect helper rather than typing out the column names.
+
+::: {.solution}
+
+:::
+
+- [ ] How many readings are there in the file, and from how many different neighbourhoods? (Hint: look at the "Other Summarise Functions" tip in the notes.)
+
+::: {.solution}
+
+:::
+
+- [ ] Which readings have a `status` other than `OK`? What do you notice about their pollution readings and `sensor_uptime_pct`?
+- [ ] Compute the mean `pm2_5_ug_m3` over all readings, and over only the readings with status `OK`. Which would you report, and why?
+
+::: {.solution}
+
+:::
+
+### Task 2: `dplyr`
+
+The `diamonds` dataset is included as a part of `ggplot2`.
+If you have loaded `tidyverse` it should be already in your environment.
+
+```{r}
+#| message: false
+library(tidyverse)
+diamonds
+```
+
+It contains information about `r nrow(diamonds)` diamonds.
+Each row is a diamond, and each column contains information about that diamond such as:
+
+- `price`: The price of the diamond in US dollars.
+- `carat`: The weight of the diamond (1 carat = 0.2g).
+- `cut`: Quality of the cut.
+- `color`: The color of the diamond.
+- `clarity`: A measure of how clear the diamond is.
+- `depth`: Total depth percentage; $= \frac{z}{\frac{1}{2}(x + y)} \times 100$.
+- `table`: Width of the top of the diamond relative to the widest point.
+- `x`: Length of the diamond in mm.
+- `y`: Width of the diamond in mm.
+- `z`: Depth of the diamond in mm.
+
+For the next few tasks you should use `dplyr` functions, using pipe syntax.
+Try to format your code nicely so it is readable.
+
+
+- [ ] Add a new column to the `tibble` called `volume` that contains the volume of the diamond ($x \times y \times z$).
+
+
+::: {.solution}
+
+:::
+
+- [ ] Create a `tibble` containing only the numeric columns of `diamonds`. (Hint: look at the tidyselect callout in the notes.)
+
+::: {.solution}
+
+:::
+
+Now answer the following research questions.
+
+- [ ] What is the average price of all the diamonds in the dataset?
+- [ ] What is the volume of the 5 highest priced diamonds?
+- [ ] What is the average, minimum and maximum price of diamonds for each cut?
+- [ ] Ideal is the best cut, yet it has the lowest average price. Can you explain why? (Hint: compare the average `carat` of each cut.)
+- [ ] For each cut, what is the average price-per-carat for diamonds with that cut?
+- [ ] What are the most common combinations of cut and colour? (Hint: look up the `count` function)
+- [ ] Create a `tibble` containing diamonds that are "unusually" large (having volume more than three standard deviations from the mean volume)?
+
+::: {.solution}
+
+:::
+
+Before trusting these results, it is worth checking whether they make sense. Since all diamonds have the same density, heavier diamonds are larger, so `carat` and `volume` should be closely related.
+
+- [ ] Look at the largest few diamonds in your answer. Given their `carat`, are their volumes plausible?
+- [ ] Add a new column called `volume_per_carat` containing the ratio of `volume` to `carat`. Look at the diamonds with the smallest and largest values of this ratio. Does this suggest there any errors in the dataset?
+- [ ] Create a new `tibble` called `diamonds_clean` that keeps only diamonds with `volume_per_carat` between 100 and 250. How many diamonds did you remove?
+- [ ] Repeat the "unusually large" question using `diamonds_clean`. How many diamonds do you find now, and why has the number changed?
+
+::: {.solution}
+
+:::
+
+- [ ] **Extension:** Find the most expensive diamond of each cut.
+
+::: {.solution}
+
+:::
+
+
+### Task 3: `tidyr`
+
+The file `data/part3/assessment.csv` contains a messy student scores table.
+It records the student's scores out of 100 across 8 possible assessments.
+However, not all students take all assessments, and assessments the student has not taken are recorded as `NA`.
+
+- [ ] Load the file and look at it. Recall the three rules of tidy data from the notes. Is this table tidy? If not, which rule(s) does it break?
+
+::: {.solution}
+
+:::
+
+- [ ] Tidy the table: pivot into long format with one row per student and assessment, and drop missing scores.
+- [ ] Compute each student's overall average, and the number of assessments they took. (Hint: look at the "Other Summarise Functions" tip in the notes.)
+
+::: {.solution}
+
+:::
+
+- [ ] Redo the pivot, this time using `starts_with` to choose the columns to pivot. Check you get the same result. Suppose a new column `student_name` were added to the file: which of the two approaches would still work, and why?
+
+::: {.solution}
+
+:::
+
+One of the key principles of tidy data is that each cell should contain only one value.
+Notice that in the new dataset, the column `assessment` contains *two* values: the Semester and the Assessment ID,
+separated by an `_`.
+
+- [ ] Use `separate_wider_delim` to split `assessment` into two columns, one with the assessment ID and one with the Semester.
+- [ ] Create a wide table with one row per student, and two new columns containing the average score in Semester 1 and Semester 2.
+
+::: {.solution}
+
+:::
+
+- [ ] Add a column `improvement` to the wide table showing how much each student's average score changed from Semester 1 to Semester 2. Which students improved the most, and which declined the most?
+
+::: {.solution}
+
+:::
+
+- [ ] **Extension:** We tidied this dataset in two steps: `pivot_longer` followed by `separate_wider_delim`. Can you do both in a single call to `pivot_longer`? (Hint: look at the `names_sep` argument in `?pivot_longer`.)
+
+::: {.solution}
+
+:::
