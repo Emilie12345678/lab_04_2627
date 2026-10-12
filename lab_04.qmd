@@ -117,31 +117,61 @@ For the next few tasks you should use `dplyr` functions, using pipe syntax.
 Try to format your code nicely so it is readable.
 
 
-- [ ] Add a new column to the `tibble` called `volume` that contains the volume of the diamond ($x \times y \times z$).
+- [x] Add a new column to the `tibble` called `volume` that contains the volume of the diamond ($x \times y \times z$).
 
 
 ::: {.solution}
-
+```{r}
+diamonds <- diamonds |>
+  mutate(volume = x * y * z)
+```
 :::
 
-- [ ] Create a `tibble` containing only the numeric columns of `diamonds`. (Hint: look at the tidyselect callout in the notes.)
+- [x] Create a `tibble` containing only the numeric columns of `diamonds`. (Hint: look at the tidyselect callout in the notes.)
 
 ::: {.solution}
-
+```{r}
+diamonds_no <- diamonds |>
+  select(where(is.numeric))
+diamonds_no
+```
 :::
 
 Now answer the following research questions.
 
-- [ ] What is the average price of all the diamonds in the dataset?
-- [ ] What is the volume of the 5 highest priced diamonds?
-- [ ] What is the average, minimum and maximum price of diamonds for each cut?
-- [ ] Ideal is the best cut, yet it has the lowest average price. Can you explain why? (Hint: compare the average `carat` of each cut.)
-- [ ] For each cut, what is the average price-per-carat for diamonds with that cut?
+- [x] What is the average price of all the diamonds in the dataset?
+- [x] What is the volume of the 5 highest priced diamonds?
+- [x] What is the average, minimum and maximum price of diamonds for each cut?
+- [x] Ideal is the best cut, yet it has the lowest average price. Can you explain why? (Hint: compare the average `carat` of each cut.)
+- [x] For each cut, what is the average price-per-carat for diamonds with that cut?
 - [ ] What are the most common combinations of cut and colour? (Hint: look up the `count` function)
 - [ ] Create a `tibble` containing diamonds that are "unusually" large (having volume more than three standard deviations from the mean volume)?
 
 ::: {.solution}
+```{r}
+diamonds |>
+  select(price) |>
+  summarise(avg_price = mean(price))
 
+diamonds |>
+  arrange(desc(price)) |>
+  filter(row_number() <= 5) |>
+  select(price, volume)
+  
+diamonds |>
+  group_by(cut) |>
+  summarise(avg_price = mean(price), min_price = min(price), max_price = max(price))
+
+diamonds |>
+  group_by(cut) |>
+  summarise(avg_carat = mean(carat))
+
+diamonds |>
+  group_by(cut) |>
+  summarise(avg_ppc = mean(price/carat))
+
+
+```
 :::
 
 Before trusting these results, it is worth checking whether they make sense. Since all diamonds have the same density, heavier diamonds are larger, so `carat` and `volume` should be closely related.
