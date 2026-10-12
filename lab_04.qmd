@@ -16,12 +16,24 @@ This lab accompanies the Week 4 notes, [*Data Wrangling I - Loading, Cleaning an
 
 ### Task 1: Loading Data
 
-- [ ] The directory `data/part1/` contains three data files. Load them into `R` using `tidyverse`. (Hint: the three files are not all formatted in the same way.)
-- [ ] By default, each `read_*` function prints a message describing the columns it has read. Make sure these messages are hidden.
-- [ ] For each of the files, display the first few rows of the file.
+- [x] The directory `data/part1/` contains three data files. Load them into `R` using `tidyverse`. (Hint: the three files are not all formatted in the same way.)
+- [x] By default, each `read_*` function prints a message describing the columns it has read. Make sure these messages are hidden.
+- [x] For each of the files, display the first few rows of the file.
 
 ::: {.solution}
-
+```{r}
+#| message: false
+library(tidyverse)
+data_1 <- read_csv("data/part1/data1.csv")
+data_2 <- read_delim("data/part1/data2.txt", delim="\t")
+data_3 <- read_delim("data/part1/data3", delim=";")
+data_1 |> 
+  filter(row_number() <= 5)
+data_2 |>
+  filter(row_number() <= 5)
+data_3 |>
+  filter(row_number() <= 5)
+```
 :::
 
 ### Task 1b: Checking Loaded Data
