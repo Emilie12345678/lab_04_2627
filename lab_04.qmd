@@ -44,12 +44,17 @@ In this task we will look more closely at the three files from Task 1.
 
 The file `data3` contains information about books in a bookshop.
 
-- [ ] Look at the type of each column. Is the `ISBN` column stored sensibly? (Hint: an ISBN is an identifier; would it make sense to add two ISBNs together? What would happen to an ISBN that starts with a `0`?)
+- [x] Look at the type of each column. Is the `ISBN` column stored sensibly? (Hint: an ISBN is an identifier; would it make sense to add two ISBNs together? What would happen to an ISBN that starts with a `0`?)
 - [ ] Reload the file so that `ISBN` is stored as text. (Hint: look up the `col_types` argument of `read_delim`, and the `cols` and `col_character` functions.)
 - [ ] `readr` also has a function called `read_csv2`, which reads files that use `;` as a delimiter. Try loading `data3` with `read_csv2` instead. Compare the `PriceUSD` and `AvgRating` columns to the raw file. What has gone wrong?
 
 ::: {.solution}
+```{r}
+col_types <- sapply(data_3, class)
+print(col_types)
+# ISBN column is not stored sensibly it should be stored as a character.
 
+```
 :::
 
 The file `data1.csv` contains student scores from two tests, with their average.
